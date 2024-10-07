@@ -1,0 +1,33 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+    <h1>Список пользователей</h1>
+    <ul>
+        {% for user in users %}
+            <li>
+                <a href="{% url 'profile' user.username %}">{{ user.username }}</a> ({{ user.email }})
+
+                {% if request.user != user %}
+                    {% if user in following %}
+                        <form method="post" action="{% url 'unfollow_user' user.username %}">
+                            {% csrf_token %}
+                            <button type="submit">Unfollow</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'follow_user' user.username %}">
+                            {% csrf_token %}
+                            <button type="submit">Follow</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Пользователи не найдены.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'post_list' %}">Вернуться к постам</a>
+    <a href="{% url 'profile' %}">Вернуться к профилю</a>
+{% endblock %}

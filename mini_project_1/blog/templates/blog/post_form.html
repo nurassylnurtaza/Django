@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Создать/Редактировать пост{% endblock %}</title>
+</head>
+<body>
+    <h1>{% if object %}Редактировать пост{% else %}Создать пост{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">
+            {% if object %}Сохранить изменения{% else %}Создать пост{% endif %}
+        </button>
+    </form>
+
+    <a href="{% url 'post_list' %}">Вернуться к списку постов</a>
+</body>
+</html>

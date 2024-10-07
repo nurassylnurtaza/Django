@@ -1,0 +1,36 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+    <h1>Профиль пользователя</h1>
+
+    {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Фото профиля" width="150" height="150">
+    {% else %}
+        <p>Фото профиля не загружено</p>
+    {% endif %}
+
+    <p><strong>Имя пользователя:</strong> {{ profile.user.username }}</p>
+    <p><strong>Email:</strong> {{ profile.user.email }}</p>
+    <p><strong>Биография:</strong> {{ profile.bio }}</p>
+
+    {% if is_own_profile %}
+        <a href="{% url 'edit_profile' %}">Редактировать профиль</a><br><br>
+    {% endif %}
+
+    {% if is_own_profile and following %}
+        <h2>Подписки</h2>
+        <ul>
+            {% for follow in following %}
+                <li><a href="{% url 'profile' follow.following.username %}">{{ follow.following.username }}</a></li>
+            {% empty %}
+                <li>Вы ни на кого не подписаны.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Кнопка "Назад к списку пользователей" и "Посты" -->
+    <a href="{% url 'user_list' %}">Список всех пользователей</a>
+    <a href="{% url 'post_list' %}">Вернуться к постам</a>
+{% endblock %}
